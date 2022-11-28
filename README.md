@@ -1,6 +1,8 @@
 # Dominó - Project under development
 Project created for learning purposes.
 
+![alt text](https://github.com/carlosac/domino/blob/master/public/ProjectDominoes.png?raw=true)
+
 # Getting Started
 First, run the development server:
 
