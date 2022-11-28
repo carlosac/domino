@@ -1,0 +1,72 @@
+<html>
+
+<head>
+
+</head>
+<link rel="stylesheet" href="style.css">
+
+<body>
+
+    <div class="grid-container">
+        <div class="itemHeader">Dominó do Gato</div>
+        <div class="itemHeaderRight">
+            <div id="formulario">
+                <div id="bemvindo">
+                    Bem vindo Fulano
+                </div>
+                <form id="form1" action="">
+                    <input id="input" autocomplete="off" /><button>Alterar apelido</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="itemMain">
+            <ul id="placar"></ul>
+            <ul id="jogadores"></ul>
+
+
+        </div>
+        <div class="itemRight">
+            <ul id="mesas"></ul>
+            <div id="formulario">
+                <form id="form2" action="">
+                    <input id="input2" autocomplete="off" /><button>Nova Mesa</button>
+                </form>
+            </div>
+            <div class="content">
+                <div id="conversation-wrapper" class="conversation-wrapper">
+                    <ul id="messages"></ul>
+                </div>
+                <div class="messaging-area">
+                    <form id="msgTextForm" action="">
+                        <input id='msgText' placeholder="Digite sua mensagem..." autocomplete="off" />
+                        <a id="send" class="send"></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="itemFooter">
+        <ul id="played" class="noli"></ul>
+        <ul id="mesa"></ul>
+        <ul> <b>Pendências</b>
+            <li>JOgar somente em uma mesa</li>
+            <li>Ajustar resposta da mesa para quem nao está jogando</li>
+            <li>Ajuste de regras para mesa com 2 jogadores com 14 peças</li>
+            <li>Ajuste de regras para mesa com 2 jogadores CPU</li>
+            <li>Ajuste de regras para mesa com 1 jogador vs. CPU com 14 peças</li>
+            <li>Mover regra de passe para o backend</li>
+            <li>Ajustar quebra de peça na mesa</li>
+            <li>Tamanho das peças proporcional a quantidade de peças na mesa</li>
+            <li>Layout responsivo</li>
+            <li>Layout mais com cara de Game</li>
+            <li>Animação - movimento das peças</li>
+            <li>Habilitar criação de mesas</li>
+        </ul>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="dominoes.js"></script>
+</body>
+
+</html>

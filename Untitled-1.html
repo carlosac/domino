@@ -1,0 +1,354 @@
+// ==UserScript==
+// @name         disabled
+// @namespace    noname
+// @version      0.1
+// @description  No description
+// @author       STF
+// @require      https://code.jquery.com/jquery-2.2.2.min.js
+// @include      https://registro.pontotel.com.br/*
+// ==/UserScript==
+
+var senha = '02201148';
+var clicks = 0;
+var fase = 0;
+var ativo = false;
+Notification.requestPermission( /* opcional: callback */ );
+
+//Object.defineProperty(document, "hidden", { value : false});
+
+console.logCopy = console.log.bind(console);
+
+console.log = function(data) {
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var currentDate = '[' + time + '] ';
+    this.logCopy(currentDate, data);
+};
+
+function setInput(element, value) {
+    element.value = (value);
+    element.dispatchEvent(new Event('input'));
+    var changeEvent = document.createEvent("HTMLEvents");
+    changeEvent.initEvent("change", true, true);
+    element.dispatchEvent(changeEvent);
+}
+
+function confirmarLogin(timeMls) {
+    setTimeout(function() {
+        console.log('confirmarLogin');
+        setInput($("input")[0], senha);
+        $('button').click();
+    }, timeMls);
+}
+
+function confirmarButton(timeMls) {
+    setTimeout(function() {
+        console.log('confirmarButton');
+        $('button.swal2-confirm').click();
+    }, timeMls);
+}
+
+function confirmarButton2(timeMls) {
+    setTimeout(function() {
+        console.log('confirmarButton ' + $('button.swal2-confirm').text());
+        console.log($('#swal2-content').text());
+        $('button.swal2-confirm').click();
+    }, timeMls);
+}
+
+function registrarPonto(timeMls) {
+    var option = parseInt($("input[name='mtipo']:checked").val());
+    setTimeout(function() {
+        console.log("registrarPonto : " + option);
+        $('button')[option].click();
+    }, timeMls);
+}
+
+function finalizar(timeMls) {
+    setTimeout(function() {
+        console.log('finalizar');
+        clicks = 0;
+        $("#hack").remove();
+        // document.location.reload(true);
+    }, timeMls);
+
+}
+
+function waitForElementToDisplay(selector, description, time) {
+    if (document.querySelector(selector) != null) {
+        console.log("Botao loCalizado.");
+        $(selector).click();
+        return;
+    } else {
+        setTimeout(function() {
+            console.log("Botao não loCalizado.");
+            waitForElementToDisplay(selector, time);
+        }, time);
+    }
+}
+
+function processar() {
+    //confirmarLogin(1500);
+    setTimeout(function() {
+        console.log('confirmarLogin ' + $('button').text());
+        setInput($("input")[0], senha);
+        // $('button').click();
+        waitForElementToDisplay
+    }, 1500);
+
+    //confirmarButton(2000);
+    setTimeout(function() {
+        console.log($('#swal2-content').text());
+        console.log("Clique : " + $('#swal2-content').click());
+        console.log('confirmarButton ' + $('button.swal2-confirm').text());
+
+        $('button.swal2-confirm').click();
+    }, 3500);
+
+    //registrarPonto(4000);
+    setTimeout(function() {
+        var option = parseInt($("input[name='mtipo']:checked").val());
+        var botao = $('button')[option];
+        var txt = botao.textContent || botao.innerText;
+        console.log("registrarPonto : " + txt);
+        $('button')[option].click();
+    }, 5000);
+
+    //confirmarButton2(5500);
+    setTimeout(function() {
+        console.log('confirmarButton ' + $('button.swal2-confirm').text());
+        console.log("Clique : " + $('#swal2-content').click());
+        console.log($('#swal2-content').text());
+        var botoes = $("button");
+        $.each(botoes, function(i, item) {
+            var txt = item.textContent || item.innerText;
+            console.log("btn : " + txt);
+        });
+        // $('button.swal2-confirm').click();
+    }, 8500);
+
+    //finalizar(6600);
+    setTimeout(function() {
+        console.log('finalizar');
+        clicks = 0;
+        $("#hack").remove();
+        // document.location.reload(true);
+    }, 9000);
+}
+
+function campos() {
+    var html = "&nbsp;<div id='hack'><div id='mlog'></div>&nbsp;<input type='text' id='mhoras' size=10><br>";
+    html += "&nbsp;<input type='radio'  name='mtipo' value='0'>";
+    html += "<label for='tipo'>Ent1</label>&nbsp;&nbsp;";
+
+    html += "<input type='radio' name='mtipo' value='1'>";
+    html += "<label for='tipo'>Sai1</label>&nbsp;&nbsp;";
+
+    html += "<input type='radio' name='mtipo' value='2'>";
+    html += "<label for='tipo'>Ent2</label>&nbsp;&nbsp;";
+
+    html += "<input type='radio' name='mtipo' value='3'>";
+    html += "<label for='tipo'>Sai2</label></div>&nbsp;&nbsp;";
+
+    //html += "<br/><div id='logponto'></div>";
+
+    //html += "<button id='botaoentrada' class='has-text-white has-text-weight-bold btn3d to-click btn-xlarge pd btn-default btn-large block btn-disabled'>Entrada efetuada (1)<h4 class='is-size-5'>31/01/22 - 08:55 </h4></button>";
+
+    //html += "<button class='has-text-white has-text-weight-bold btn3d to-click btn-xlarge pd btn-danger btn-large block'><div  class='pts-wrapper'><p  class='kind-number'>4</p><p class='kind-name'>Saída</p><img src='img/saida.f263ba5e.svg' class='pts-icon re-mobile saida'></div></button>"
+
+    $("body").append(html);
+}
+
+
+$("#confirmasenhanumerica").click(function() {
+    if ($('#logponto').length) {
+        $('#logponto').remove();
+    }
+});
+
+$("input").click(function() {
+    clicks++;
+    console.log("clique : " + clicks);
+    if (clicks == 5) {
+        campos();
+        if (window.location.href == 'https://registro.pontotel.com.br/#/password') {
+            comparaHoras();
+            console.log('nada a fazer');
+        }
+
+    }
+});
+
+
+
+function exibirLog() {
+    var tipo = '';
+    switch (parseInt($("input[name='mtipo']:checked").val())) {
+        case 0:
+            tipo = 'Entrada';
+            break;
+        case 1:
+            tipo = 'Pausa';
+            break;
+        case 2:
+            tipo = 'Retorno';
+            break;
+        case 3:
+            tipo = 'Saida';
+            break;
+        default:
+            tipo = 'Inválido';
+    }
+    $('#mlog').text($('h1').text().substring(0, 5) + " == " + $('#mhoras').val().substring(0, 5) + " - " + tipo);
+    $('#ent1').text($('#mhoras').val().substring(0, 5));
+}
+
+function comparaHoras() {
+    var x = 1;
+    var horas = setInterval(function() {
+        if ($('#mhoras').val().substring(0, 5) == $('h1').text().substring(0, 5) && typeof $("input[name='mtipo']:checked").val() !== "undefined") {
+            ativo = true;
+            //setPageVisible();
+            //processar();
+
+            console.log("fim loop compara hora");
+            clearTimeout(horas);
+        }
+        exibirLog();
+        console.log($('#mhoras').val().substring(0, 5) + ' == ' + $('h1').text().substring(0, 5));
+        if (x >= 50 && $('#mhoras').val().substring(0, 5) === "") { // 50 tentativas e texto em branco
+            console.log("fim loop compara hora 2");
+            clearTimeout(horas);
+        } else {
+            x++;
+        }
+    }, 30000);
+}
+
+
+
+let observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        //   $.each($("button"), function (i, item) {
+        //      if( $('#selecionaponto').length && !$('#logponto').length){
+        //         var $el = $('.container-pts').clone().attr('id', 'clone');
+        //       var html = "<div id='logponto' style='width:30px'></div>";
+        //       $( "body" ).append( html );
+        //       $('#logponto').html("");
+        //       $('#logponto').append($el);
+        //     }
+        //   });
+        if (!mutation.addedNodes || !ativo) return
+        $("window").focus();
+        $("input").focus();
+        document.hasFocus = function() { return true; };
+        //Object.defineProperty(document, "hidden", { value : false});
+        setPageVisible();
+        for (let i = 0; i < mutation.addedNodes.length; i++) {
+            let node = mutation.addedNodes[i]
+            console.log('mutation added');
+            console.log(node);
+            setPageVisible();
+            switch (fase) {
+                case 0:
+                    if ($('button').length) {
+                        confirmarLogin(1000);
+                        console.log('Botao 1 + ' + fase);
+                        fase++;
+                    }
+                    break;
+                case 1:
+                    if ($('button.btn-success').length && $('.titulo').textContent == 'identificação do empregado:') {
+                        $('button.btn-success').click();
+                        console.log('Botao 2 + ' + fase);
+                        fase++;
+                    }
+                    break;
+                case 2:
+                    if ($('button.swal2-confirm').length && $('#swal2-content').text().substring(0, 10) == 'Seu nome é') {
+                        $('button.swal2-confirm').click();
+                        console.log('Botao 2 + ' + fase);
+                        fase++;
+                    }
+                    break;
+                case 3:
+                    var option = 0;
+                    console.log('Botao 3 + ' + fase);
+                    var botoes = $("button");
+                    $.each(botoes, function(i, item) {
+                        var txt = item.textContent || item.innerText;
+                        if (txt.includes("Entrada")) {
+                            option = parseInt($("input[name='mtipo']:checked").val())
+                                //$('button')[option].click();
+                            $(window).focus();
+                            registrarPonto(4000);
+                            console.log("Registrando ponto " + option);
+                            fase++;
+                        }
+                        console.log("btn : " + txt);
+                    });
+
+                    break;
+                    // case 4:
+                    //     if($('button.swal2-confirm').length && $('#swal2-content').text().substring(0, 14) == 'Podemos seguir'){
+                    //        $('button.swal2-confirm').click();
+                    //        console.log('Botao de Confirmação registro + ' + fase);
+                    //        var $el = $('#selecionaponto').clone();
+                    //         $('#logponto').html("");
+                    //        $('#logponto').append($el);
+                    //        fase++;
+                    //     }else{
+                    //         console.log("Botao nao localizado! I am Sorry Bro :-( ");
+                    //     }
+                    //     break;
+                default:
+                    console.log('Fim do observador');
+                    observer.disconnect();
+            }
+        }
+    })
+})
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false
+})
+
+// stop watching using:
+//observer.disconnect()
+
+function setPageVisible() {
+    var hidden = "hidden";
+    if (hidden in document) document.addEventListener("visibilitychange", onchange);
+    else if ((hidden = "mozHidden") in document) document.addEventListener("mozvisibilitychange", onchange);
+    else if ((hidden = "webkitHidden") in document) document.addEventListener("webkitvisibilitychange", onchange);
+    else if ((hidden = "msHidden") in document) document.addEventListener("msvisibilitychange", onchange);
+    else if ('onfocusin' in document) document.onfocusin = document.onfocusout = onchange;
+    else window.onpageshow = window.onpagehide = window.onfocus = window.onblur = onchange;
+    //Object.defineProperty(document, "hidden", { value : false});
+
+    function onchange(evt) {
+        var evtMap = {
+            focus: true,
+            focusin: true,
+            pageshow: true,
+            blur: false,
+            focusout: false,
+            pagehide: false
+        };
+
+        evt = evt || window.event;
+        if (evt.type in evtMap) evtMap[evt.type] ? console.log('Visible') : console.log('Hidden');
+        else this[hidden] ? console.log('Hidden') : console.log('Visible');
+    }
+
+    function functionVisible() {
+        console.log('Visible');
+    }
+
+    function functionHidden() {
+        console.log('Hidden');
+    }
+}
