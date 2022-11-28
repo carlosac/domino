@@ -1,5 +1,5 @@
-# domino
-Jogo de dominó
+# Dominó - Project under development
+Project created for learning purposes.
 
 # Getting Started
 First, run the development server:
